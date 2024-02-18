@@ -1,17 +1,23 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { CreateUserInput } from './dto/createUser.input';
-import { User as UsreModel } from './models/user.model';
+import { User as UserModel } from './models/user.model';
 import { User } from '@prisma/client';
+import { GetUserArgs } from './dto/gerUser.arg';
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Mutation(() => UsreModel)
+  @Mutation(() => UserModel)
   async createUser(
     @Args(`createUserInput`) createUserInput: CreateUserInput,
   ): Promise<User> {
     return await this.userService.createUser(createUserInput);
+  }
+
+  @Query(() => UserModel, { nullable: true })
+  async getUser(@Args() getUserArgs: GetUserArgs): Promise<User> {
+    return await this.userService.getUser(getUserArgs.email);
   }
 }
