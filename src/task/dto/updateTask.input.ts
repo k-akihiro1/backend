@@ -25,4 +25,7 @@ export class UpdateTaskInput {
 
   @Field({ nullable: true })
   description?: string;
+
+  @Field(() => Int)
+  userId: number;
 }
